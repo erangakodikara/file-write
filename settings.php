@@ -18,7 +18,6 @@
  * Standard log store settings.
  *
  * @package    logstore_file_write
- * @copyright  2013 Petr Skoda {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

@@ -55,14 +55,14 @@ class instrumentation_log extends \core\event\base
      * @return string
      */
     public function get_description(): string {
-        return "The user with id '$this->userid' logging plugin activity ";
+        return "The user with id '$this->userid' logging plugin activities ";
     }
 
     protected function get_legacy_logdata(): array {
         return array(
-            "test 1",
-            "test 2",
-            "test 3"
+            $this->userid,
+            "logging plugin",
+            "instrumentaion log"
         );
     }
     public static function get_other_mapping(): array {

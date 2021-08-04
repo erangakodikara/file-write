@@ -18,13 +18,10 @@
  *logstore_file_write/writer.
  *
  * @package    logstore_standard
- * @copyright  2013 Petr Skoda {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace logstore_file_write\log;
-
-
 
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
@@ -32,9 +29,6 @@ require_once($CFG->dirroot . '/backup/util/interfaces/checksumable.class.php');
 require_once($CFG->dirroot . '/backup/backup.class.php');
 require_once($CFG->dirroot . '/backup/util/loggers/base_logger.class.php');
 require_once($CFG->dirroot . '/backup/util/loggers/error_log_logger.class.php');
-//require_once($CFG->dirroot . '/backup/util/loggers/output_text_logger.class.php');
-//require_once($CFG->dirroot . '/backup/util/loggers/output_indented_logger.class.php');
-//require_once($CFG->dirroot . '/backup/util/loggers/database_logger.class.php');
 require_once($CFG->dirroot . '/backup/util/loggers/file_logger.class.php');
 
 use file_logger;
@@ -71,11 +65,9 @@ class store implements \tool_log\log\writer{
         return false;
     }
 
-
     protected function insert_event_entries($evententries)
     {
         global $CFG;
-        //$file = $CFG->tempdir . '/test/test_file_logger.txt';
         $file = $CFG->logstore_file_write_error_log_path;
 
         if (!check_dir_exists(dirname($file), true, true)) {
@@ -83,9 +75,15 @@ class store implements \tool_log\log\writer{
         }
 
         $options = array('depth' => 1);
-        $lo1 = new file_logger(backup::LOG_ERROR, true, true, $file);
-        $message1 = json_encode($evententries);
-        $lo1->process($message1, backup::LOG_ERROR, $options);
+
+        try {
+            $lo = new file_logger(backup::LOG_ERROR, true, true, $file);
+            $message1 = json_encode($evententries);
+            $lo->process($message1, backup::LOG_ERROR, $options);
+            $lo->close();
+        } catch (\base_logger_exception $e) {
+        }
+
     }
 
 }
